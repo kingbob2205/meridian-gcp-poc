@@ -73,7 +73,8 @@ func newPostgresChecker(host, port, user, dbName string) dbChecker {
 		if host == "" || user == "" || dbName == "" {
 			return errors.New("database connection parameters incomplete")
 		}
-		cfg, err := pgx.ParseConfig("")
+		// Enforce TLS in transit against Cloud SQL (ssl_mode = ENCRYPTED_ONLY) via structured ConnConfig (no DSN string interpolation).
+		cfg, err := pgx.ParseConfig("sslmode=require connect_timeout=4")
 		if err != nil {
 			return err
 		}
@@ -88,14 +89,8 @@ func newPostgresChecker(host, port, user, dbName string) dbChecker {
 		cfg.Password = password
 		cfg.Database = dbName
 		cfg.ConnectTimeout = 4 * time.Second
-		// Enforce TLS in transit against Cloud SQL (ssl_mode = ENCRYPTED_ONLY).
-		cfg.RuntimeParams["sslmode"] = "require"
 
-		dsn := fmt.Sprintf(
-			"host=%s port=%d user=%s password=%s dbname=%s sslmode=require connect_timeout=4",
-			cfg.Host, cfg.Port, cfg.User, cfg.Password, cfg.Database,
-		)
-		conn, err := pgx.Connect(ctx, dsn)
+		conn, err := pgx.ConnectConfig(ctx, cfg)
 		if err != nil {
 			return err
 		}

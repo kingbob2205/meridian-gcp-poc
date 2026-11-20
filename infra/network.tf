@@ -50,6 +50,7 @@ resource "google_compute_firewall" "allow_egress_sql_psc" {
   network            = google_compute_network.main.name
   direction          = "EGRESS"
   priority           = 1000
+  target_tags        = ["meridian-api"]
   destination_ranges = ["${google_compute_address.sql_psc_ip.address}/32"]
 
   allow {

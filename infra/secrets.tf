@@ -25,8 +25,9 @@ resource "google_secret_manager_secret" "db_password" {
 }
 
 resource "google_secret_manager_secret_version" "db_password" {
-  secret      = google_secret_manager_secret.db_password.id
-  secret_data = random_password.db_password.result
+  secret                 = google_secret_manager_secret.db_password.id
+  secret_data_wo         = random_password.db_password.result
+  secret_data_wo_version = 1
 }
 
 resource "google_secret_manager_secret" "third_party_api_token" {
@@ -50,8 +51,9 @@ resource "google_secret_manager_secret" "third_party_api_token" {
 }
 
 resource "google_secret_manager_secret_version" "third_party_api_token" {
-  secret      = google_secret_manager_secret.third_party_api_token.id
-  secret_data = "mrd_tok_${random_password.third_party_api_token.result}"
+  secret                 = google_secret_manager_secret.third_party_api_token.id
+  secret_data_wo         = "mrd_tok_${random_password.third_party_api_token.result}"
+  secret_data_wo_version = 1
 }
 
 # Least-privilege secret-level IAM: Cloud Run SA can read ONLY these two secrets.

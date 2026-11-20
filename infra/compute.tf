@@ -53,6 +53,7 @@ resource "google_cloud_run_v2_service" "api" {
       network_interfaces {
         network    = google_compute_network.main.name
         subnetwork = google_compute_subnetwork.app.name
+        tags       = ["meridian-api"]
       }
       egress = "PRIVATE_RANGES_ONLY"
     }
@@ -130,6 +131,10 @@ resource "google_cloud_run_v2_service" "api" {
   depends_on = [
     google_project_service.apis,
     google_compute_forwarding_rule.sql_psc_endpoint,
+    google_compute_firewall.allow_egress_sql_psc,
+    google_sql_user.app,
+    google_secret_manager_secret_version.db_password,
+    google_secret_manager_secret_version.third_party_api_token,
     google_secret_manager_secret_iam_member.api_db_password_accessor,
     google_secret_manager_secret_iam_member.api_token_accessor,
   ]
