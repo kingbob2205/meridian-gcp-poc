@@ -1,0 +1,8 @@
+project_id        = "meridian-gcp-poc-ho26"
+region            = "europe-west3"
+state_bucket_name = "meridian-gcp-poc-ho26-tfstate"
+candidate_name    = "Hazav Ogdan"
+image_uri         = "europe-west3-docker.pkg.dev/meridian-gcp-poc-ho26/meridian-api/api:REPLACE_WITH_GIT_SHA"
+git_sha           = "REPLACE_WITH_GIT_SHA"
+github_repo       = "kingbob2205/meridian-gcp-poc"
+reviewer_email    = "gcp-hr@comm-it.cloud"

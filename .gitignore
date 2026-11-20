@@ -1,0 +1,29 @@
+# Terraform local state, cache & sensitive vars
+.terraform/
+*.tfstate
+*.tfstate.*
+crash.log
+crash.*.log
+*.tfvars
+!terraform.tfvars.example
+override.tf
+override.tf.json
+*_override.tf
+*_override.tf.json
+.terraformrc
+terraform.rc
+
+# Credentials & keys (never committed)
+*.json
+!package.json
+*.pem
+*.key
+.env
+.env.*
+
+# OS / IDE noise
+.DS_Store
+Thumbs.db
+*.swp
+.idea/
+.vscode/
