@@ -2,6 +2,7 @@ package main
 
 import (
 	"context"
+	"crypto/tls"
 	"encoding/json"
 	"errors"
 	"fmt"
@@ -73,8 +74,8 @@ func newPostgresChecker(host, port, user, dbName string) dbChecker {
 		if host == "" || user == "" || dbName == "" {
 			return errors.New("database connection parameters incomplete")
 		}
-		// Enforce TLS in transit against Cloud SQL (ssl_mode = ENCRYPTED_ONLY) via structured ConnConfig (no DSN string interpolation).
-		cfg, err := pgx.ParseConfig("sslmode=require connect_timeout=4")
+		// Enforce TLS 1.2+ in transit against Cloud SQL (ssl_mode = ENCRYPTED_ONLY) via structured ConnConfig (no DSN interpolation).
+		cfg, err := pgx.ParseConfig("")
 		if err != nil {
 			return err
 		}
@@ -89,6 +90,11 @@ func newPostgresChecker(host, port, user, dbName string) dbChecker {
 		cfg.Password = password
 		cfg.Database = dbName
 		cfg.ConnectTimeout = 4 * time.Second
+		cfg.TLSConfig = &tls.Config{
+			MinVersion:         tls.VersionTLS12,
+			InsecureSkipVerify: true, // Cloud SQL server cert CN is project:instance, not the PSC internal IP.
+		}
+		cfg.Fallbacks = nil
 
 		conn, err := pgx.ConnectConfig(ctx, cfg)
 		if err != nil {
