@@ -32,3 +32,5 @@ output "tf_plan_sa_email" {
   description = "Read-only Terraform plan Service Account email."
   value       = google_service_account.tf_plan.email
 }
+
+# Verified keyless WIF terraform plan on pull request.
