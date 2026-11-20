@@ -14,6 +14,7 @@ resource "google_sql_database_instance" "postgres" {
   deletion_protection = false # Set true in production; false here for post-review teardown.
 
   settings {
+    edition           = "ENTERPRISE"
     tier              = "db-f1-micro" # Upgrade to custom vCPU/RAM + REGIONAL HA in production.
     availability_type = "ZONAL"
     disk_autoresize   = true

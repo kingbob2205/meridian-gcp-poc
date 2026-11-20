@@ -1,8 +1,8 @@
-# Read-only reviewer access for Commit's Google Cloud evaluation team.
+# Read-only reviewer access for Commit's Google Cloud evaluation team (Google Group).
 resource "google_project_iam_member" "commit_reviewer" {
   project = var.project_id
   role    = "roles/viewer"
-  member  = "user:${var.reviewer_email}"
+  member  = "group:${var.reviewer_email}"
 }
 
 # Keyless GitHub Actions authentication via Workload Identity Federation (replaces static JSON keys).
