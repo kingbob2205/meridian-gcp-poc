@@ -1,5 +1,5 @@
 # Multi-stage hardened build: Go static binary -> distroless nonroot runtime.
-FROM golang:1.23-alpine AS builder
+FROM golang:1.26-alpine AS builder
 
 WORKDIR /src
 COPY go.mod main.go main_test.go ./
